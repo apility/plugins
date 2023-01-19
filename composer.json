@@ -1,0 +1,42 @@
+{
+    "name": "apility/plugins",
+    "description": "Laravel plugin architecture",
+    "keywords": [
+        "laravel",
+        "plugin"
+    ],
+    "authors": [
+        {
+            "name": "Thomas Alrek",
+            "email": "thomas@apility.no"
+        }
+    ],
+    "license": "MIT",
+    "type": "library",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "illuminate/support": "^8.0|^9.0",
+        "illuminate/auth": "^8.0|^9.0",
+        "illuminate/console": "^8.0|^9.0"
+    },
+    "require-dev": {
+        "illuminate/container": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Apility\\Plugins\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Apility\\Plugins\\Providers\\PluginServiceProvider"
+            ],
+            "aliases": {
+                "Plugin": "Apility\\Plugins\\Facades\\Plugin"
+            }
+        }
+    }
+}

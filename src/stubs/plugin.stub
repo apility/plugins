@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Plugins;
+
+use Apility\Plugins\AbstractPlugin as Plugin;
+
+class DummyPlugin extends AbstractPlugin
+{
+    /**
+     * This hook is called when the plugin is registered.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}
