@@ -11,6 +11,7 @@ use ReflectionException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\HigherOrderCollectionProxy;
 
 use Apility\Plugins\Contracts\Plugin;
 use Apility\Plugins\Contracts\PluginRepository as PluginRepositoryContract;
@@ -133,5 +134,22 @@ class PluginRepository implements PluginRepositoryContract
             ->filter($this->getFilterForType($type))
             ->values()
             ->all();
+    }
+
+    public function each(?string $type = null): HigherOrderCollectionProxy
+    {
+        if ($type) {
+            return $this->eachOfType($type);
+        }
+
+        return $this->plugins()
+            ->each;
+    }
+
+    protected function eachOfType(string $type): HigherOrderCollectionProxy
+    {
+        return $this->plugins()
+            ->filter($this->getFilterForType($type))
+            ->each;
     }
 }
