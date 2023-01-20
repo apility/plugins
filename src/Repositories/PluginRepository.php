@@ -9,10 +9,8 @@ use Exception;
 use ReflectionException;
 
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\ForwardsCalls;
 
 use Apility\Plugins\Contracts\Plugin;
 use Apility\Plugins\Contracts\PluginRepository as PluginRepositoryContract;
@@ -23,30 +21,16 @@ use Apility\Plugins\Exceptions\PluginRegistrationException;
 class PluginRepository implements PluginRepositoryContract
 {
     use Macroable;
-    use ForwardsCalls;
 
-    protected Collection $plugins;
-    protected Closure $filter;
-
-    protected $isRunningInConsole = null;
+    private Collection $plugins;
 
     public function __construct()
     {
         $this->plugins = new Collection;
     }
 
-    protected function resolvePlugins(): Collection
+    protected function plugins(): Collection
     {
-        if (App::has(\Illuminate\Contracts\Auth\Access\Gate::class)) {
-            return $this->plugins->filter(function (Plugin $plugin) {
-                if (!Gate::getPolicyFor(get_class($plugin))) {
-                    return $plugin;
-                }
-
-                return Gate::allows('view', $plugin);
-            });
-        }
-
         return $this->plugins;
     }
 
@@ -61,13 +45,13 @@ class PluginRepository implements PluginRepositoryContract
             return $this->countOfType($type);
         }
 
-        return $this->resolvePlugins()
+        return $this->plugins()
             ->count();
     }
 
     protected function countOfType(string $type): int
     {
-        return $this->resolvePlugins()
+        return $this->plugins()
             ->filter($this->getFilterForType($type))
             ->count();
     }
@@ -120,13 +104,13 @@ class PluginRepository implements PluginRepositoryContract
             return $this->firstOfType($type);
         }
 
-        return $this->resolvePlugins()
+        return $this->plugins()
             ->first();
     }
 
     protected function firstOfType(string $class): ?Plugin
     {
-        return $this->resolvePlugins()
+        return $this->plugins()
             ->first($this->getFilterForType($class));
     }
 
@@ -137,7 +121,7 @@ class PluginRepository implements PluginRepositoryContract
             return $this->allOfType($type);
         }
 
-        return $this->resolvePlugins()
+        return $this->plugins()
             ->values()
             ->all();
     }
@@ -145,14 +129,9 @@ class PluginRepository implements PluginRepositoryContract
     /** @return Plugin[] */
     protected function allOfType(string $type): array
     {
-        return $this->resolvePlugins()
+        return $this->plugins()
             ->filter($this->getFilterForType($type))
             ->values()
             ->all();
-    }
-
-    public function __call($method, $parameters)
-    {
-        return $this->forwardCallTo($this->resolvePlugins(), $method, $parameters);
     }
 }

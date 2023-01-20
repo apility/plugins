@@ -4,6 +4,6 @@ namespace Apility\Plugins\Contracts;
 
 interface PolicyProvider
 {
-    public function getPolicy(): string;
-    public function registerPolicy();
+    public function getPolicies(): array;
+    public function registerPolicies();
 }

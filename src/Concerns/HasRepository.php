@@ -7,12 +7,11 @@ use Apility\Plugins\Contracts\PluginRepository;
 
 trait HasRepository
 {
-    protected bool $repositorySet = false;
-    protected PluginRepository $repository;
+    protected ?PluginRepository $repository = null;
 
     public function getPluginRepository(): PluginRepository
     {
-        if (!$this->repositorySet) {
+        if ($this->repository === null) {
             throw new RuntimeException('Plugin repository has not been set');
         }
 
@@ -21,7 +20,7 @@ trait HasRepository
 
     public function setPluginRepository(PluginRepository $repository)
     {
-        if ($this->repositorySet) {
+        if ($this->repository !== null) {
             throw new RuntimeException('Plugin repository has already been set');
         }
 

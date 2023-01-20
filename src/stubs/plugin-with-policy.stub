@@ -2,25 +2,17 @@
 
 namespace App\Plugins;
 
-use App\Policies\DummyPolicy;
-
 use Apility\Plugins\AbstractPlugin as Plugin;
 use Apility\Plugins\Contracts\PolicyProvider;
-use Apility\Plugins\Concerns\HasPolicy;
+use Apility\Plugins\Concerns\HasPolicies;
 
 class DummyPlugin extends Plugin implements PolicyProvider
 {
-    use HasPolicy;
+    use HasPolicies;
 
-    /**
-     * The plugin policy class name.
-     *
-     * @return string
-     */
-    public function getPolicy(): string
-    {
-        return DummyPolicy::class;
-    }
+    protected $policies = [
+        // \App\Models\Foo::class => \App\Policies\FooPolicy::class,
+    ];
 
     /**
      * This hook is called when the plugin is registered.

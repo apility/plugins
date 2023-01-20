@@ -45,25 +45,6 @@ class MakePlugin extends GeneratorCommand
         if (parent::handle() === false && !$this->option('force')) {
             return false;
         }
-
-        if ($this->option('policy')) {
-            $this->createPolicy();
-        }
-    }
-
-    /**
-     * Create a model factory for the model.
-     *
-     * @return void
-     */
-    protected function createPolicy()
-    {
-        $policy = Str::studly($this->argument('name'));
-
-        $this->call('make:policy', [
-            'name' => "{$policy}Policy",
-            '--model' => $this->qualifyClass($this->getNameInput()),
-        ]);
     }
 
     /**
@@ -78,10 +59,6 @@ class MakePlugin extends GeneratorCommand
     {
         $stub = $this->files->get($this->getStub());
         $this->replaceNamespace($stub, $name);
-
-        if ($this->option('policy')) {
-            $stub = $this->replacePolicy($stub, class_basename($name));
-        }
 
         return $this->replaceClass($stub, $name);
     }
@@ -98,20 +75,6 @@ class MakePlugin extends GeneratorCommand
         $stub = parent::replaceClass($stub, $name);
 
         return str_replace('DummyPlugin', $this->argument('name'), $stub);
-    }
-
-    /**
-     * Replace the policy name for the given stub.
-     *
-     * @param  string  $stub
-     * @param  string  $name
-     * @return string
-     */
-    protected function replacePolicy($stub, $name)
-    {
-        $policy = Str::studly($name) . 'Policy';
-
-        return str_replace(['DummyPolicy', '{{ policy }}', '{{policy}}'], $policy, $stub);
     }
 
     /**

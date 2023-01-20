@@ -109,14 +109,6 @@ $plugin = Plugin::first();
 $plugin = Plugin::first(MyPlugin::class);
 ```
 
-```php
-use Apility\Plugins\Facades\Plugin;
-
-$plugins = Plugin::filter(function ($plugin) {
-    return $plugin instanceof MyPlugin;
-});
-```
-
 ## Generating a plugin
 
 You can use the `make:plugin` command to generate a plugin.
