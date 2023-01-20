@@ -3,6 +3,7 @@
 namespace Apility\Plugins\Contracts;
 
 use Apility\Plugins\Contracts\Plugin;
+use Illuminate\Support\HigherOrderCollectionProxy;
 
 interface PluginRepository
 {
@@ -16,5 +17,7 @@ interface PluginRepository
     public function first(?string $type = null): ?Plugin;
 
     /** @return Plugin[] */
-    public function all(string $type = null): array;
+    public function all(?string $type = null): array;
+
+    public function each(?string $type = null): HigherOrderCollectionProxy;
 }
